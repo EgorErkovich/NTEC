@@ -28,8 +28,8 @@ class ManufacturerSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ("id", "name", "price", "discount", "manufacturer")
-        read_only_fields = ("id",)
+        fields = ("id", "name", "price", "discount", "final_price", "manufacturer")
+        read_only_fields = ("id", "final_price")
 
     def validate_name(self, value):
         if not value.strip():
