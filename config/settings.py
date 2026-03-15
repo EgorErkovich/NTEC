@@ -76,17 +76,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+if os.environ.get("RUNNING_IN_DOCKER"):
+    DB_HOST = "host.docker.internal"
+else:
+    DB_HOST = "localhost"
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'NTEC_shop',
         'USER': 'ntec_user',
         'PASSWORD': 'ntec_pass',
-        'HOST': 'localhost',
+        "HOST": DB_HOST,
         'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -130,3 +135,6 @@ SWAGGER_SETTINGS = {
     'DEFAULT_MODEL_RENDERING': 'schema',
     'DOC_EXPANSION': 'none',
 }
+
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"

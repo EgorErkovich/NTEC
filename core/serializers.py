@@ -81,3 +81,15 @@ class OrderUpdateItemsSerializer(serializers.Serializer):
         if not attrs:
             raise serializers.ValidationError("Нужно передать хотя бы одно поле")
         return attrs
+
+
+class UploadFileSerializer(serializers.Serializer):
+    file = serializers.FileField()
+
+    def validate_file(self, file):
+        name = file.name.lower()
+
+        if not name.endswith('.csv'):
+            raise serializers.ValidationError("Можно загружать только CSV файлы (.csv)")
+
+        return file

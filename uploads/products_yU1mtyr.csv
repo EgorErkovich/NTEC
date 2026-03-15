@@ -1,0 +1,51 @@
+name,price,discount,manufacturer_id
+Apple iPhone 14,799.99,0,1
+Samsung Galaxy S23,699.50,10,2
+Xiaomi Redmi Note 12,249.00,5,3
+Apple MacBook Air M2,1199.00,0,1
+Lenovo ThinkPad X1 Carbon,1499.99,15,4
+Sony WH-1000XM5,349.99,5,5
+Logitech MX Master 3S,99.99,0,6
+Apple iPad Pro 11,899.00,0,1
+Amazon Kindle Paperwhite,129.99,0,7
+HP LaserJet Pro M404dn,249.99,10,8
+Dell XPS 13,1299.00,5,4
+Asus ROG Strix G15,1599.00,10,9
+Acer Nitro 5,899.00,5,9
+Canon EOS R10,999.00,0,10
+Nikon Z50,849.00,0,10
+Bose QuietComfort 45,329.00,5,5
+JBL Charge 5,149.00,0,5
+Xiaomi Mi Band 7,49.99,0,3
+Garmin Fenix 7,699.00,10,6
+Samsung Galaxy Watch 6,299.00,5,2
+Apple Watch Series 9,399.00,0,1
+Sony PlayStation 5,499.00,0,5
+Xbox Series X,499.00,0,8
+Nintendo Switch OLED,349.00,0,7
+TP-Link Archer AX55,129.00,0,6
+Netgear Nighthawk RAX50,199.00,5,6
+Philips Hue Starter Kit,179.00,0,10
+Dyson V12 Detect Slim,649.00,10,10
+iRobot Roomba i7,499.00,5,10
+Samsung 55'' QLED TV,999.00,10,2
+LG OLED C2 55'',1299.00,5,9
+Sony Bravia XR55,1399.00,5,5
+Xiaomi Mi TV P1 55'',499.00,0,3
+Apple AirPods Pro 2,249.00,0,1
+Samsung Galaxy Buds 2 Pro,199.00,5,2
+JBL Tune 760NC,129.00,0,5
+Anker Soundcore Life Q35,99.00,0,6
+HyperX Cloud Alpha,99.00,0,9
+Razer BlackShark V2,129.00,0,9
+Dell UltraSharp U2723QE,699.00,0,4
+LG UltraGear 27GP850,449.00,5,9
+Samsung Odyssey G7,699.00,10,2
+BenQ PD2705U,599.00,0,8
+AOC 24G2U,199.00,0,9
+MSI Optix MAG274QRF,449.00,5,9
+Kingston NVMe 1TB,89.00,0,6
+Samsung 980 Pro 1TB,129.00,0,2
+Crucial MX500 1TB,79.00,0,6
+Seagate Barracuda 2TB,59.00,0,8
+WD Black SN850X 1TB,149.00,5,8

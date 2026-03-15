@@ -40,7 +40,7 @@ class Product(models.Model):
         on_delete=models.CASCADE,
         related_name='products'
     )
-    final_price = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
+    final_price = models.DecimalField(max_digits=10, decimal_places=2, editable=False, null=True, blank=True)
 
     class Meta:
         verbose_name = "Товар"
@@ -49,6 +49,10 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class Order(models.Model):
@@ -92,3 +96,22 @@ class Order(models.Model):
 
     def __str__(self):
         return f'Заказ #{self.id}'
+
+
+class ImportTask(models.Model):
+    PENDING = "pending"
+    RUNNING = "running"
+    SUCCESS = "success"
+    FAILED = "failed"
+
+    STATUS_CHOICES = [
+        (PENDING, "Pending"),
+        (RUNNING, "Running"),
+        (SUCCESS, "Success"),
+        (FAILED, "Failed"),
+    ]
+
+    task_id = models.CharField(max_length=255, unique=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=PENDING)
+    progress = models.PositiveIntegerField(default=0)
+    error = models.TextField(null=True, blank=True)

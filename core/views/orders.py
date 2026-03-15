@@ -3,20 +3,10 @@ from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Manufacturer, Order, Product
-from .serializers import (ManufacturerSerializer, OrderCreateSerializer,
-                          OrderReadSerializer, OrderStatusSerializer,
-                          OrderUpdateItemsSerializer, ProductSerializer)
-
-
-class ManufacturerViewSet(viewsets.ModelViewSet):
-    queryset = Manufacturer.objects.all()
-    serializer_class = ManufacturerSerializer
-
-
-class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+from core.models import Order, Product
+from core.serializers import (OrderCreateSerializer, OrderReadSerializer,
+                              OrderStatusSerializer,
+                              OrderUpdateItemsSerializer)
 
 
 class OrderViewSet(
