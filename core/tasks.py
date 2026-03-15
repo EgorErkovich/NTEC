@@ -1,5 +1,4 @@
 import csv
-import time
 
 from celery import shared_task
 from django.core.exceptions import ValidationError
@@ -27,7 +26,6 @@ def import_products_task(file_path, task_db_id):
             validate_csv_structure(fieldnames)
 
             for index, row in enumerate(rows, start=1):
-                time.sleep(1)
                 line = index + 1
                 validate_row_data(row, line)
                 create_product_from_row(row, line)
@@ -40,7 +38,7 @@ def import_products_task(file_path, task_db_id):
 
     except ValidationError as e:
         task.status = ImportTask.FAILED
-        task.error = str(e)
+        task.error = e.messages[0]
         task.save()
 
     except Exception as e:

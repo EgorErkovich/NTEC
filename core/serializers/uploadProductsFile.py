@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import ImportTask
+from core.models import ImportTask
 
 
 class UploadFileSerializer(serializers.Serializer):
@@ -15,7 +15,7 @@ class UploadFileSerializer(serializers.Serializer):
         return file
 
 
-class ImportTaskSerializer(serializers.ModelSerializer):
+class ImportTaskStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImportTask
         fields = ["task_id", "status", "progress", "error"]

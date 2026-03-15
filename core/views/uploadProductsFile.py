@@ -1,11 +1,12 @@
 from django.core.files.storage import default_storage
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.models import ImportTask
-from core.serializers import UploadFileSerializer
+from core.serializers import ImportTaskStatusSerializer, UploadFileSerializer
 from core.tasks import import_products_task
 
 
@@ -25,7 +26,8 @@ class UploadProductsView(APIView):
 
         task = ImportTask.objects.create(
             status=ImportTask.PENDING,
-            task_id=""
+            task_id="",
+            error=None
         )
 
         celery_task = import_products_task.delay(saved_path, task.id)
@@ -34,3 +36,9 @@ class UploadProductsView(APIView):
         task.save()
 
         return Response({"task_id": task.task_id})
+
+
+class ImportTaskStatusView(RetrieveAPIView):
+    queryset = ImportTask.objects.all()
+    serializer_class = ImportTaskStatusSerializer
+    lookup_field = "task_id"
