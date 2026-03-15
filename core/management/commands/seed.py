@@ -1,4 +1,5 @@
 import random
+from decimal import Decimal
 
 from django.core.management.base import BaseCommand
 from faker import Faker
@@ -27,8 +28,8 @@ class Command(BaseCommand):
         for _ in range(50):
             p = Product.objects.create(
                 name=fake.word().capitalize(),
-                price=random.uniform(10, 500),
-                discount=random.uniform(0, 30),
+                price=Decimal(str(round(random.uniform(10, 500), 2))),
+                discount=Decimal(str(round(random.uniform(0, 30), 2))),
                 manufacturer=random.choice(manufacturers)
             )
             products.append(p)

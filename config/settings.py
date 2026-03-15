@@ -25,7 +25,7 @@ SECRET_KEY = 'm1f3*4u(!32+$24m2%7$!td)**ou-iy*-#h2pni-)k0ei+!6po'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -76,20 +76,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-if os.environ.get("RUNNING_IN_DOCKER"):
-    DB_HOST = "host.docker.internal"
-else:
-    DB_HOST = "localhost"
-
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'NTEC_shop',
-        'USER': 'ntec_user',
-        'PASSWORD': 'ntec_pass',
-        "HOST": DB_HOST,
-        'PORT': '5432',
+        'NAME': os.getenv("DB_NAME", "NTEC_shop"),
+        'USER': os.getenv("DB_USER", "ntec_user"),
+        'PASSWORD': os.getenv("DB_PASSWORD", "ntec_pass"),
+        'HOST': os.getenv("DB_HOST", "db"),
+        'PORT': os.getenv("DB_PORT", "5432"),
     }
 }
 
@@ -130,11 +125,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 
 SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'LOGIN_REQUIRED': False,
     'DEFAULT_MODEL_RENDERING': 'schema',
     'DOC_EXPANSION': 'none',
 }
 
-CELERY_BROKER_URL = "redis://localhost:6379/0"
-CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://redis:6379/0")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://redis:6379/0")

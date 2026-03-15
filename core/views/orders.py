@@ -4,9 +4,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from core.models import Order, Product
-from core.serializers import (OrderCreateSerializer, OrderReadSerializer,
-                              OrderStatusSerializer,
-                              OrderUpdateItemsSerializer)
+from core.serializers.orders import (OrderCreateSerializer,
+                                     OrderReadSerializer,
+                                     OrderStatusSerializer,
+                                     OrderUpdateItemsSerializer)
 
 
 class OrderViewSet(

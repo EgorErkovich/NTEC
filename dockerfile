@@ -1,4 +1,4 @@
-FROM python:3.6-slim
+FROM python:3.6
 
 WORKDIR /app
 
@@ -7,4 +7,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["celery", "-A", "config", "worker", "-l", "info"]
+COPY entrypoint.sh /entrypoint.sh
+COPY entrypoint_celery.sh /entrypoint_celery.sh
+RUN chmod +x /entrypoint.sh /entrypoint_celery.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

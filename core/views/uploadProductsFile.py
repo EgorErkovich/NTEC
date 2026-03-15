@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.models import ImportTask
-from core.serializers import ImportTaskStatusSerializer, UploadFileSerializer
+from core.serializers.uploadProductsFile import (ImportTaskStatusSerializer,
+                                                 UploadFileSerializer)
 from core.tasks import import_products_task
 
 
