@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "m1f3*4u(!32+$24m2%7$!td)**ou-iy*-#h2pni-)k0ei+!6po")
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -85,7 +85,7 @@ DATABASES = {
         'NAME': os.getenv("DB_NAME", "NTEC_shop"),
         'USER': os.getenv("DB_USER", "ntec_user"),
         'PASSWORD': os.getenv("DB_PASSWORD", "ntec_pass"),
-        'HOST': os.getenv("DB_HOST", "localhost"),
+        'HOST': os.getenv("DB_HOST", "db"),
         'PORT': os.getenv("DB_PORT", "5432"),
     }
 }
@@ -148,6 +148,10 @@ CSRF_TRUSTED_ORIGINS = [
     'https://localhost',
     'https://127.0.0.1',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': []
+}
 
 LOGGING = {
     'version': 1,
