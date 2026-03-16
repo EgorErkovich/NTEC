@@ -12,39 +12,78 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-                migrations.RunSQL(
-                    sql="""
-                    CREATE OR REPLACE FUNCTION update_final_price()
-                    RETURNS TRIGGER AS $$
-                    DECLARE
-                        avg_price NUMERIC(10,2);
-                        threshold NUMERIC(10,2);
-                        discounted NUMERIC(10,2);
-                        base NUMERIC(10,2);
-                    BEGIN
-                        SELECT AVG(price) INTO avg_price FROM core_product;
+        migrations.RunSQL(
+            sql="""
+            CREATE TABLE IF NOT EXISTS product_stats (
+                id INT PRIMARY KEY DEFAULT 1,
+                avg_price NUMERIC
+            );
 
-                        threshold := avg_price * 0.5;
-                        discounted := NEW.price * (1 - NEW.discount / 100);
+            INSERT INTO product_stats (id, avg_price)
+            SELECT 1, AVG(price) FROM core_product
+            ON CONFLICT (id) DO NOTHING;
 
-                        base := GREATEST(discounted, threshold);
+            CREATE OR REPLACE FUNCTION recalc_product_stats()
+            RETURNS TRIGGER AS $$
+            BEGIN
+                UPDATE product_stats
+                SET avg_price = (SELECT AVG(price) FROM core_product)
+                WHERE id = 1;
+                RETURN NULL;
+            END;
+            $$ LANGUAGE plpgsql;
 
-                        NEW.final_price := LEAST(base, NEW.price);
+            DROP TRIGGER IF EXISTS product_stats_update ON core_product;
 
-                        RETURN NEW;
-                    END;
-                    $$ LANGUAGE plpgsql;
+            CREATE TRIGGER product_stats_update
+            AFTER INSERT OR UPDATE OR DELETE ON core_product
+            FOR EACH STATEMENT
+            EXECUTE PROCEDURE recalc_product_stats();
 
-                    DROP TRIGGER IF EXISTS trg_update_final_price ON core_product;
+            CREATE OR REPLACE FUNCTION update_final_price()
+            RETURNS TRIGGER AS $$
+            DECLARE
+                avg_price NUMERIC;
+                min_allowed NUMERIC;
+                discounted NUMERIC;
+            BEGIN
+                SELECT product_stats.avg_price
+                INTO avg_price
+                FROM product_stats
+                WHERE id = 1;
 
-                    CREATE TRIGGER trg_update_final_price
-                    BEFORE INSERT OR UPDATE ON core_product
-                    FOR EACH ROW
-                    EXECUTE FUNCTION update_final_price();
-                    """,
-                    reverse_sql="""
-                    DROP TRIGGER IF EXISTS trg_update_final_price ON core_product;
-                    DROP FUNCTION IF EXISTS update_final_price();
-                    """
-            )
+                min_allowed := avg_price * 0.5;
+                discounted := NEW.price * (1 - NEW.discount / 100);
+
+                NEW.final_price := GREATEST(discounted, min_allowed);
+
+                IF NEW.final_price > NEW.price THEN
+                    NEW.final_price := NEW.price;
+                END IF;
+
+                RETURN NEW;
+            END;
+            $$ LANGUAGE plpgsql;
+
+
+
+            DROP TRIGGER IF EXISTS trg_update_final_price ON core_product;
+
+            CREATE TRIGGER trg_update_final_price
+            BEFORE INSERT OR UPDATE OF price, discount ON core_product
+            FOR EACH ROW
+            EXECUTE PROCEDURE update_final_price();
+            """,
+
+            reverse_sql="""
+            DROP TRIGGER IF EXISTS trg_update_final_price ON core_product;
+            DROP FUNCTION IF EXISTS update_final_price();
+
+            DROP TRIGGER IF EXISTS product_stats_update ON core_product;
+            DROP FUNCTION IF EXISTS recalc_product_stats();
+
+            DROP TABLE IF EXISTS product_stats;
+            """
+        )
+
     ]
